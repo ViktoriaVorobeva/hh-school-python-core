@@ -13,10 +13,7 @@ class Market:
         :param drinks:
         :return: dict
         """
-        dict = {}
-        for drink in drinks:
-            dict[drink.title] = drink.production_date
-        return dict
+        return {drink.title: drink.production_date for drink in drinks}
     
     @time_decorator
     def has_drink_with_title(self, title=None) -> bool:
@@ -35,8 +32,7 @@ class Market:
 
         :return: list
         """
-        all_drinks = list(self.drinks.keys())
-        return sorted(all_drinks)
+        return sorted(self.wines + self.beers, key=lambda drink: drink.title)
 
     @time_decorator
     def get_drinks_by_production_date(self, from_date=None, to_date=None) -> list:
@@ -45,12 +41,12 @@ class Market:
 
         :return: list
         """
-        all_drinks = list(self.drinks.items())
+        all_drinks = self.wines + self.beers
         filtered_drinks = []
         for drink in all_drinks:
-            if from_date and drink[1] < from_date:
+            if from_date and drink.production_date < from_date:
                 continue
-            if to_date and to_date < drink[1]:
+            if to_date and to_date < drink.production_date:
                 continue
             filtered_drinks.append(drink)    
         return filtered_drinks
